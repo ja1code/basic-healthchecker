@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"io/ioutil"
+	"github.com/ja1code/basic-healthchecker/src/entities/config.go"
 )
 
 func StartApp() {
