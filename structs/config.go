@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 var ALLOWED_TOKEN_POSITIONS map[string]bool = map[string]bool{ // Used as a ENUM to validate either the position specified can or cannot be used w/ the app
@@ -26,6 +27,7 @@ type AuthDesc struct { // Describes basic Auth
 }
 
 type GenericAlertDestination struct {
+	Type    string `mapstructuere:"type"`
 	Token   string `mapstructure:"token"`
 	Channel string `mapstructure:"channel"` // Discord channel Id, Slack Channel Id, Telegram Group/Channel Id
 }
@@ -60,5 +62,45 @@ func loadConfig() []ObservedHost {
 
 	rawFile.Close()
 
+	for _, config := range readConfigs {
+		validateAuthFields(config)
+
+		validateAlertDestinations(config.AlertDestinations)
+	}
+
 	return readConfigs
+}
+
+func validateAuthFields(config ObservedHost) {
+	if config.Auth.Token == "" {
+		return
+	}
+
+	config.Auth.Position = strings.ToUpper(config.Auth.Position)
+
+	if config.Auth.Position == "" {
+		config.Auth.Position = "HEADER"
+	}
+
+	if config.Auth.Prefix == "" {
+		config.Auth.Prefix = "Basic"
+	}
+
+	if config.Auth.Key == "" {
+		config.Auth.Key = "Authorization"
+	}
+
+	if !ALLOWED_TOKEN_POSITIONS[config.Auth.Position] {
+		fmt.Println("[ERROR] Auth token position", config.Auth.Position, "isn't recognized.")
+		os.Exit(0)
+	}
+}
+
+func validateAlertDestinations(destinations []GenericAlertDestination) {
+	for _, destination := range destinations {
+		if !ALERT_DESTINATIONS[destination.] {
+			fmt.Println("[ERROR] Invalid/Inactive destination", destination, ", check the README.md file for all available destinations.")
+			os.Exit(0)
+		}
+	}
 }

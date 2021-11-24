@@ -19,7 +19,7 @@ func main() {
 
 	stest := mock{}
 
-	if stest.wow == mm{} {
+	if !stest.wow.isthere {
 		fmt.Printf("Is false")
 	}
 
