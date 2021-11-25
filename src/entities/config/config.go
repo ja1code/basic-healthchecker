@@ -41,7 +41,7 @@ type ObservedHost struct {
 
 var config []ObservedHost
 
-func loadConfig() []ObservedHost {
+func LoadConfig() []ObservedHost {
 	var readConfigs []ObservedHost
 
 	rawFile, fileOpenErr := os.Open("config.json")
@@ -68,6 +68,7 @@ func loadConfig() []ObservedHost {
 		validateAlertDestinations(config.AlertDestinations)
 	}
 
+	fmt.Println("[INFO] Config file loaded and validated successfully!")
 	return readConfigs
 }
 
@@ -97,8 +98,13 @@ func validateAuthFields(config ObservedHost) {
 }
 
 func validateAlertDestinations(destinations []GenericAlertDestination) {
+	if len(destinations) == 0 {
+		fmt.Println("[WARNING] No alert destinations found, only logs will be created.")
+	}
+
 	for _, destination := range destinations {
-		if !ALERT_DESTINATIONS[destination.] {
+		destination.Type = strings.ToUpper(destination.Type)
+		if !ALERT_DESTINATIONS[destination.Type] {
 			fmt.Println("[ERROR] Invalid/Inactive destination", destination, ", check the README.md file for all available destinations.")
 			os.Exit(0)
 		}
