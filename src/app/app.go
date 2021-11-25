@@ -16,12 +16,11 @@ func StartApp() {
 	}
 
 	for _, config := range configs {
-		_, error := tester.TestHost(config.Url)
+		_, err := tester.TestHost(config.Url)
 
-		println(&error) // fkn address
-		if error != nil {
+		if err != nil {
 			println("[ERROR] Error while testing", config.Url)
-			println(error) // fkn address
+			println(string(err.Body)) // fkn address
 		}
 	}
 
