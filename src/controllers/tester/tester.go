@@ -16,12 +16,19 @@ var ACCEPTABLE_HTTP_CODES map[int]bool = map[int]bool{
 	204: true,
 }
 
-func TestHost(url string) (bool, *customError.HttpError) {
+type SuccessfulResponseData struct {
+	StatusCode int
+	Body       string
+	Header     map[string][]string // Header type copied from http src
+}
+
+func TestHost(url string) (*SuccessfulResponseData, *customError.HttpError) {
 	fmt.Println("[INFO] Testing", url)
 
 	response, err := http.Get(url)
 
 	body, _ := io.ReadAll(response.Body)
+	header := response.Header
 
 	if err != nil {
 		fmt.Println("[ERROR] Unable to request ", url)
@@ -32,10 +39,17 @@ func TestHost(url string) (bool, *customError.HttpError) {
 			Url:        url,
 			StatusCode: response.StatusCode,
 			Body:       body,
+			Header:     header,
 		}
 
-		return false, errorStruct
+		return nil, errorStruct
 	}
 
-	return true, nil
+	successData := &SuccessfulResponseData{
+		StatusCode: response.StatusCode,
+		Body:       string(body),
+		Header:     header,
+	}
+
+	return successData, nil
 }
