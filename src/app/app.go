@@ -34,11 +34,13 @@ func StartApp() {
 			}
 
 			log.SpecificLog(config.Url, requestData)
+			log.CsvLog(config.Url, false, err.StatusCode)
 
 			println("[ERROR] Error while testing", config.Url)
 			continue
 		}
 
+		log.CsvLog(config.Url, true, successData.StatusCode)
 		log.GenericLog(config.Url, true, successData.StatusCode)
 	}
 
