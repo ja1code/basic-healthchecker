@@ -3,6 +3,7 @@ package app
 import (
 	"encoding/json"
 	"os"
+	"time"
 
 	"github.com/ja1code/basic-healthchecker/src/controllers/log"
 	"github.com/ja1code/basic-healthchecker/src/controllers/tester"
@@ -18,6 +19,14 @@ func StartApp() {
 		os.Exit(0)
 	}
 
+	for {
+		MainRoutine(configs)
+		time.Sleep(20 * time.Second)
+	}
+
+}
+
+func MainRoutine(configs []config.ObservedHost) {
 	for _, config := range configs {
 		successData, err := tester.TestHost(config.Url)
 
@@ -43,5 +52,4 @@ func StartApp() {
 		log.CsvLog(config.Url, true, successData.StatusCode)
 		log.GenericLog(config.Url, true, successData.StatusCode)
 	}
-
 }
