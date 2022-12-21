@@ -26,6 +26,17 @@ func TestHost(url string) (*SuccessfulResponseData, *customError.HttpError) {
 	fmt.Println("[INFO] Testing", url)
 
 	response, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("[ERROR] Unable to request %s", url)
+
+		errorStruct := &customError.HttpError{
+			Url:        url,
+			StatusCode: 0,
+			Body:       nil,
+			Header:     nil,
+		}
+		return nil, errorStruct
+	}
 
 	body, _ := io.ReadAll(response.Body)
 	header := response.Header
