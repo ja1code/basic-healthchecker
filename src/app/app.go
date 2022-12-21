@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/ja1code/basic-healthchecker/src/controllers/log"
-	"github.com/ja1code/basic-healthchecker/src/controllers/tester"
 	"github.com/ja1code/basic-healthchecker/src/entities/config"
+	"github.com/ja1code/basic-healthchecker/src/services/log"
+	"github.com/ja1code/basic-healthchecker/src/services/tester"
 )
 
 func StartApp() {
