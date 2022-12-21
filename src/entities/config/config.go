@@ -35,8 +35,8 @@ type GenericAlertDestination struct {
 type ObservedHost struct {
 	Url               string                    `mapstructure:"url"`
 	Auth              AuthDesc                  `mapstructure:"auth"`
-	Priority          int                       `mapstructure="priority"`
-	AlertDestinations []GenericAlertDestination `mapstructure="destinations"`
+	Priority          int                       `mapstructure:"priority"`
+	AlertDestinations []GenericAlertDestination `mapstructure:"destinations"`
 }
 
 var config []ObservedHost
